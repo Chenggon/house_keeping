@@ -1,8 +1,10 @@
 package com.cg.house_keeping.config;
 
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -14,27 +16,17 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories("com.cg.house_keeping.dao")
+@EnableJpaRepositories(basePackages = "com.cg.house_keeping.dao")
+@EntityScan(basePackages = "com.cg.house_keeping.model.po")
 @EnableTransactionManagement
 public class JpaConfig {
 
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
-
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(true);
-
-        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-        factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("com.cg.house_keeping.model.po");
-        factory.setDataSource(dataSource);
-        return factory;
-    }
 
     @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
-        JpaTransactionManager txManager = new JpaTransactionManager();
-        txManager.setEntityManagerFactory(entityManagerFactory);
-        return txManager;
+    PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor(){
+
+        return new PersistenceExceptionTranslationPostProcessor();
+
     }
+
 }
