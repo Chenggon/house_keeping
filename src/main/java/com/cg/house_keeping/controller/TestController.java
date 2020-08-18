@@ -18,7 +18,7 @@ public class TestController {
 
     @RequestMapping("/test")
     @ResponseBody
-    public List<OrderLocationEntity> test(){
+    public List<OrderLocationEntity> test() {
         orderLocationRepository.findAll();
         return orderLocationRepository.queryNeary(116.420723f, 40.001221f, 1, 0, 10);
     }
